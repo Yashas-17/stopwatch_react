@@ -1,0 +1,104 @@
+// Write your code here
+import './index.css'
+import {Component} from 'react'
+
+class Stopwatch extends Component {
+  state = {clockRunning: false, minutesTimer: '00', secondsTimer: '00'}
+
+  onclickStart = () => {
+    const {clockRunning} = this.state
+    if (clockRunning === false) {
+      this.intervalId = setInterval(this.tick, 1000)
+    }
+  }
+
+  tick = () => {
+    const {clockRunning, minutesTimer, secondsTimer} = this.state
+    if (!clockRunning) {
+      if (parseInt(secondsTimer) < 60) {
+        this.setState(prev => ({
+          secondsTimer: parseInt(prev.secondsTimer) + 1,
+          clockRunning: true,
+        }))
+      } else {
+        this.setState(prev => ({
+          minutesTimer: parseInt(prev.minutesTimer) + 1,
+          secondsTimer: '00',
+          clockRunning: true,
+        }))
+      }
+    } else {
+      if (parseInt(secondsTimer) < 59) {
+        this.setState(prev => ({
+          secondsTimer: parseInt(prev.secondsTimer) + 1,
+          clockRunning: true,
+        }))
+      } else {
+        this.setState(prev => ({
+          minutesTimer: parseInt(prev.minutesTimer) + 1,
+          secondsTimer: '00',
+          clockRunning: true,
+        }))
+      }
+    }
+  }
+
+  onclickStop = () => {
+    clearInterval(this.intervalId)
+    this.setState({clockRunning: false})
+  }
+
+  onclickReset = () => {
+    clearInterval(this.intervalId)
+    this.setState({minutesTimer: '00', secondsTimer: '00', clockRunning: false})
+  }
+
+  render() {
+    const {minutesTimer, secondsTimer} = this.state
+    return (
+      <div className="main-container">
+        <div className="bg-container">
+          <div className="card-container">
+            <h1>Stopwatch</h1>
+            <div className="timer-card-container">
+              <div className="time-timer-container">
+                <img
+                  src="https://assets.ccbp.in/frontend/react-js/stopwatch-timer.png"
+                  className="timer-img"
+                  alt="stopwatch"
+                />
+                <h2>Timer</h2>
+              </div>
+              <h1>{`${minutesTimer}:${secondsTimer}`}</h1>
+              <div className="buttons-container">
+                <button
+                  className="btn green"
+                  type="button"
+                  onClick={this.onclickStart}
+                  disabled={clockRunning}
+                >
+                  Start
+                </button>
+                <button
+                  className="btn red"
+                  type="button"
+                  onClick={this.onclickStop}
+                >
+                  Stop
+                </button>
+                <button
+                  className="btn yellow"
+                  type="button"
+                  onClick={this.onclickReset}
+                >
+                  Reset
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    )
+  }
+}
+export default Stopwatch
